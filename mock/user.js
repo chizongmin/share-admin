@@ -80,5 +80,17 @@ module.exports = [
         data: 'success'
       }
     }
+  },
+  // user logout
+  {
+    url: '/vue-admin-template/user/changePassword',
+    type: 'post',
+    response: _ => {
+      return {
+        code: 20000,
+        data: 'success',
+        message: '原始密码错误！'
+      }
+    }
   }
 ]

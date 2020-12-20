@@ -45,13 +45,35 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
-    children: [{
-      path: 'dashboard',
-      name: 'Dashboard',
-      component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
-    }]
+    // redirect: '/order',
+    // name: 'order',
+    meta: { title: '订单', icon: 'form' },
+    children: [
+      {
+        path: '/order/index',
+        name: '订单详情',
+        component: () => import('@/views/order/index'),
+        meta: { title: '订单详情', icon: 'form' }
+      },
+      {
+        path: '/order/cancel',
+        name: 'cancel',
+        component: () => import('@/views/order/cancel'),
+        meta: { title: '退货订单', icon: 'form' }
+      }
+    ]
+  },
+  {
+    path: '/form',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Form',
+        component: () => import('@/views/form/index'),
+        meta: { title: 'Form', icon: 'form' }
+      }
+    ]
   },
 
   {
@@ -72,19 +94,6 @@ export const constantRoutes = [
         name: 'Tree',
         component: () => import('@/views/tree/index'),
         meta: { title: 'Tree', icon: 'tree' }
-      }
-    ]
-  },
-
-  {
-    path: '/form',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
       }
     ]
   }
@@ -148,7 +157,7 @@ export const asyncRoutes = [
       {
         path: 'menu2',
         component: () => import('@/views/nested/menu2/index'),
-        meta: { title: 'menu2' }
+        meta: { title: 'menu2', roles: ['admin'] }
       }
     ]
   },
@@ -159,7 +168,7 @@ export const asyncRoutes = [
     children: [
       {
         path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'External Link', icon: 'link' }
+        meta: { title: 'External Link', icon: 'link', roles: ['admin'] }
       }
     ]
   },

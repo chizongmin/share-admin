@@ -36,12 +36,9 @@ module.exports = {
       errors: true
     },
     proxy: {
-      '/share': {
+      '/': {
         target: process.env.PROXY_URL, // 要跨域的域名
-        changeOrigin: true, // 是否开启跨域
-        pathRewrite: {
-          '^/share': '/share'
-        }
+        changeOrigin: true // 是否开启跨域
       }
     }
   },

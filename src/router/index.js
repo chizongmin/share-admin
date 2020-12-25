@@ -48,7 +48,7 @@ export const constantRoutes = [
     // redirect: '/order',
     // name: 'order',
     meta: { title: '订单', icon: 'form' },
-    children: [
+  /*  children: [
       {
         path: '/order/index',
         name: '订单详情',
@@ -61,7 +61,7 @@ export const constantRoutes = [
         component: () => import('@/views/order/cancel'),
         meta: { title: '退货订单', icon: 'form' }
       }
-    ]
+    ]*/
   },
   {
     path: '/form',

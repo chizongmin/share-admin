@@ -41,7 +41,6 @@ module.exports = {
         target: process.env.PROXY_URL, // 要跨域的域名
         logLevel: 'debug',
         changeOrigin: true,
-        secure: false,
         pathRewrite: {
           '^/api': ''
         }

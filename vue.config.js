@@ -35,16 +35,6 @@ module.exports = {
     overlay: {
       warnings: false,
       errors: true
-    },
-    proxy: {
-      '/api': {
-        target: process.env.PROXY_URL, // 要跨域的域名
-        logLevel: 'debug',
-        changeOrigin: true,
-        pathRewrite: {
-          '^/api': ''
-        }
-      }
     }
   },
   configureWebpack: {

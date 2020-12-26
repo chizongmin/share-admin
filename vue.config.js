@@ -42,7 +42,7 @@ module.exports = {
         logLevel: 'debug',
         changeOrigin: true, // 是否开启跨域
         pathRewrite: {
-          '^/api': '/'
+          '^/api': ''
         }
       }
     }

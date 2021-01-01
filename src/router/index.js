@@ -45,10 +45,10 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    // redirect: '/order',
+    redirect: '/order/index',
     // name: 'order',
     meta: { title: '订单', icon: 'form' },
-  /*  children: [
+    children: [
       {
         path: '/order/index',
         name: '订单详情',
@@ -58,20 +58,20 @@ export const constantRoutes = [
       {
         path: '/order/cancel',
         name: 'cancel',
-        component: () => import('@/views/order/cancel'),
-        meta: { title: '退货订单', icon: 'form' }
+        component: () => import('@/views/order/detail'),
+        meta: { title: '订单明细', icon: 'form' }
       }
-    ]*/
+    ]
   },
   {
-    path: '/form',
+    path: '/user',
     component: Layout,
     children: [
       {
         path: 'index',
         name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
+        component: () => import('@/views/user/index'),
+        meta: { title: '用户列表', icon: 'el-icon-user', roles: ['admin'] }
       }
     ]
   },

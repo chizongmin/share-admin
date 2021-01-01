@@ -6,7 +6,7 @@ function resolve(dir) {
   return path.join(__dirname, dir)
 }
 
-const name = defaultSettings.title || 'vue Admin Template' // page title
+const name = defaultSettings.title
 
 // If your port is set to 80,
 // use administrator privileges to execute the command line.
@@ -35,6 +35,16 @@ module.exports = {
     overlay: {
       warnings: false,
       errors: true
+    },
+    proxy: {
+      '/api': {
+        target: process.env.PROXY_URL, // 要跨域的域名
+        logLevel: 'debug',
+        changeOrigin: true, // 是否开启跨域
+        pathRewrite: {
+          '^/api': '/'
+        }
+      }
     }
   },
   configureWebpack: {

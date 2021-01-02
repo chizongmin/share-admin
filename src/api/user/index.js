@@ -7,3 +7,9 @@ export function list(params) {
     params: params
   })
 }
+export function filterAddress() {
+  return request({
+    url: '/userAddress/filterList',
+    method: 'get'
+  })
+}

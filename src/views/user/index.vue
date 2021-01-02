@@ -1,10 +1,20 @@
 <template>
   <div class="app-container">
     <div class="filterDiv">
-      <div class="statusDiv">
-        <el-select v-model="params.status" clearable placeholder="请选择">
+      <div class="addressDiv">
+        <el-select v-model="params.country" clearable placeholder="请选择">
           <el-option
-            v-for="item in statusOptions"
+            v-for="item in address.country"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </div>
+      <div class="addressDiv">
+        <el-select v-model="params.villager" clearable placeholder="请选择">
+          <el-option
+            v-for="item in address.villager"
             :key="item.value"
             :label="item.label"
             :value="item.value">
@@ -51,17 +61,22 @@
       </el-table-column>
       <el-table-column label="城乡" align="center">
         <template slot-scope="scope">
-          {{ scope.row.country }}
+          {{ scope.row.strCountry }}
         </template>
       </el-table-column>
       <el-table-column align="center" label="小区">
         <template slot-scope="scope">
-          <span>{{ scope.row.villager }}</span>
+          <span>{{ scope.row.strVillager }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="积分">
         <template slot-scope="scope">
           <span>{{ scope.row.score }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="创建时间">
+        <template slot-scope="scope">
+          <span>{{ scope.row.dateCreated }}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -82,7 +97,7 @@
 </template>
 
 <script>
-import { list } from '@/api/user/index'
+import { list, filterAddress } from '@/api/user/index'
 import { formatDate } from 'element-ui/src/utils/date-util'
 export default {
   filters: {
@@ -106,26 +121,14 @@ export default {
         pageNumber: 1,
         status: 'wait',
         startDate: null,
-        endDate: null
+        endDate: null,
+        country: null,
+        villager: null
       },
-      statusOptions: [
-        {
-          value: 'wait',
-          label: '待处理'
-        },
-        {
-          value: 'sending',
-          label: '派送中'
-        },
-        {
-          value: 'finish',
-          label: '已完成'
-        },
-        {
-          value: 'cancel',
-          label: '已退货'
-        }
-      ],
+      address: {
+        country: null,
+        villager: null
+      },
       filterDateRange: null
     }
   },
@@ -140,8 +143,15 @@ export default {
     const start = formatDate(new Date().getTime() - 3600 * 1000 * 24 * 1, 'yyyy-MM-dd')
     this.filterDateRange = [start, end]
     this.fetchData()
+    this.filterAddress()
   },
   methods: {
+    filterAddress() {
+      filterAddress().then(response => {
+        this.address.country = response.data.country
+        this.address.villager = response.data.villager
+      })
+    },
     fetchData() {
       this.listLoading = true
       list(this.params).then(response => {
@@ -166,12 +176,12 @@ export default {
   .filterDiv {
     margin-bottom: 30px;
   }
-  .statusDiv {
+  .addressDiv {
     display: inline;
+    margin-right: 20px;
   }
   .dateDiv {
     display: inline;
-    margin-left: 20px;
   }
   .searchDiv {
     float:right;

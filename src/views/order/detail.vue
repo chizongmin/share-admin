@@ -85,16 +85,6 @@
 import { list } from '@/api/order/order'
 import { formatDate } from 'element-ui/src/utils/date-util'
 export default {
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'gray',
-        deleted: 'danger'
-      }
-      return statusMap[status]
-    }
-  },
   data() {
     return {
       list: null,

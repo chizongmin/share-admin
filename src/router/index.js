@@ -69,13 +69,25 @@ export const constantRoutes = [
     children: [
       {
         path: 'index',
-        name: 'Form',
+        name: 'user',
         component: () => import('@/views/user/index'),
         meta: { title: '用户列表', icon: 'el-icon-user', roles: ['admin'] }
       }
     ]
   },
-
+  {
+    path: '/goods',
+    redirect: '/goods/index',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'Form',
+        component: () => import('@/views/goods/index'),
+        meta: { title: '商品列表', icon: 'el-icon-goods', roles: ['admin'] }
+      }
+    ]
+  },
   {
     path: '/example',
     component: Layout,

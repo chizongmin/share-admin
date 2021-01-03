@@ -146,7 +146,7 @@ export default {
     this.filterAddress()
   },
   methods: {
-    filterAddress() {
+    async filterAddress() {
       filterAddress().then(response => {
         this.address.country = response.data.country
         this.address.villager = response.data.villager

@@ -21,3 +21,10 @@ export function updateCategory(data) {
     data
   })
 }
+export function updateCategorySort(data) {
+  return request({
+    url: '/category/updateSort',
+    method: 'post',
+    data
+  })
+}

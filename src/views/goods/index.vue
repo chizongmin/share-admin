@@ -5,6 +5,7 @@
       :data="list"
       :stripe="true"
       element-loading-text="Loading"
+      row-key="id"
       border
       fit
       highlight-current-row
@@ -24,35 +25,33 @@
           <span>{{ scope.row.desc }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="排序" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.sort }}</span>
-        </template>
-      </el-table-column>
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
-          <el-button @click.native="updateCategory(scope.row)" type="text" size="small">编辑</el-button>
+          <el-button @click.native="openUpdateCategory(scope.row)" type="text" size="small">编辑</el-button>
+          <el-button  type="text" size="small" class="sortable">拖拽</el-button>
         </template>
       </el-table-column>
     </el-table>
     <UpdateCategory
       :update-dialog-visible.sync="updateDialogVisible"
       :category="currentRow"
-      @closeUpdateDialogVisible="closeUpdateDialogVisible"
+      @closeUpdateDialogVisible="closeUpdateCategory"
+      v-if="updateDialogVisible"
     />
   </div>
 </template>
 
 <script>
-import { goodsList, categoryList } from '@/api/goods/index'
+import { goodsList, categoryList, updateCategorySort } from '@/api/goods/index'
 import UpdateCategory from '@/views/goods/updateCategory'
+import Sortable from 'sortablejs'
 export default {
   components: {
     UpdateCategory
   },
   data() {
     return {
-      list: null,
+      list: [],
       listLoading: true,
       currentRow: null,
       updateDialogVisible: false,
@@ -62,6 +61,19 @@ export default {
   created() {
     this.fetchData()
   },
+  mounted() {
+    const table = document.querySelector('.el-table__body-wrapper tbody')
+    const self = this
+    Sortable.create(table, {
+      animation: 500,
+      handle: '.sortable',
+      onEnd({ newIndex, oldIndex }) {
+        const targetRow = self.list.splice(oldIndex, 1)[0]
+        self.list.splice(newIndex, 0, targetRow)
+        self.drag()
+      }
+    })
+  },
   methods: {
     fetchData() {
       this.listLoading = true
@@ -70,21 +82,16 @@ export default {
         this.listLoading = false
       })
     },
-    updateCategory(category) {
+    openUpdateCategory(category) {
       this.currentRow = category
       this.updateDialogVisible = true
     },
-    closeUpdateDialogVisible(visable) {
+    closeUpdateCategory(visable) {
       this.updateDialogVisible = false
       this.fetchData()
     },
-    search() {
-      goodsList().then(response => {
-        this.list = response.data.items
-        this.totalCount = response.data.totalCount
-        this.listLoading = false
-        this.searchLoading = false
-      })
+    drag() {
+      updateCategorySort({ list: this.list })
     }
   }
 }

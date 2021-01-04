@@ -13,10 +13,6 @@
       <el-form-item label="描述" :label-width="formLabelWidth"  prop="desc">
         <el-input v-model="category.desc" autocomplete="off" type="textarea"></el-input>
       </el-form-item>
-      <el-form-item label="排序" :label-width="formLabelWidth" prop="sort">
-        <el-input-number v-model="category.sort" label="描述文字"></el-input-number>
-      </el-form-item>
-
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="close">取 消</el-button>

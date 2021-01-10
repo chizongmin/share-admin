@@ -6,7 +6,6 @@
       :stripe="true"
       element-loading-text="Loading"
       row-key="id"
-      border
       fit
       highlight-current-row
     >
@@ -42,7 +41,7 @@
 </template>
 
 <script>
-import { goodsList, categoryList, updateCategorySort } from '@/api/goods/index'
+import { categoryList, updateCategorySort } from '@/api/goods/index'
 import UpdateCategory from '@/views/goods/updateCategory'
 import Sortable from 'sortablejs'
 export default {

@@ -28,3 +28,18 @@ export function updateCategorySort(data) {
     data
   })
 }
+
+export function upsertGoods(data) {
+  return request({
+    url: '/goods/upsert',
+    method: 'post',
+    data
+  })
+}
+export function deleteGoods(params) {
+  return request({
+    url: '/goods/delete',
+    method: 'get',
+    params: params
+  })
+}

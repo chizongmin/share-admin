@@ -27,6 +27,7 @@
         element-loading-text="Loading"
         row-key="id"
         fit
+        height="550"
         highlight-current-row
       >
         <el-table-column align="center" label="名称">
@@ -87,6 +88,7 @@
 <script>
 import upsertGood from '@/views/goods/upsertGood'
 import { goodsList, deleteGoods } from '@/api/goods/index'
+import { goodsTabList } from '@/api/cacheMap'
 
 export default {
   components: {
@@ -101,27 +103,11 @@ export default {
       currentRow: {},
       dialogVisible: false,
       action: null,
-      tabList: [
-        {
-          'label': '蔬菜',
-          'name': 'vegetables'
-        }, {
-          'label': '水果',
-          'name': 'fruits'
-        }, {
-          'label': '厨房常用',
-          'name': 'kitchen'
-        }, {
-          'label': '生活用品',
-          'name': 'daily'
-        }, {
-          'label': '二手回收',
-          'name': 'recycling'
-        }
-      ]
+      tabList: null
     }
   },
   created() {
+    this.tabList = goodsTabList
     this.fetchData()
   },
   methods: {
@@ -142,7 +128,6 @@ export default {
       this.fetchData()
     },
     deleteGoods(id) {
-      alert(id)
       deleteGoods({ id: id }).then(response => {
         this.fetchData()
       })

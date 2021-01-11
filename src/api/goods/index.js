@@ -43,3 +43,11 @@ export function deleteGoods(params) {
     params: params
   })
 }
+export function addToCategoryList(params) {
+  return request({
+    url: '/goods/addToCategoryList',
+    method: 'get',
+    params: params
+  })
+}
+

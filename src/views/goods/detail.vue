@@ -79,7 +79,6 @@
         :dialog-visible.sync="dialogVisible"
         :item="currentRow"
         :action="action"
-        :tab-list="tabList"
         @closeDialog="closeDialog"
       />
     </div>

@@ -51,10 +51,11 @@
 
 <script>
 import { upsertGoods } from '@/api/goods/index'
+import { goodsTabList } from '@/api/cacheMap'
 export default {
   name: 'UpsertGood',
   // eslint-disable-next-line vue/require-prop-types
-  props: ['item', 'dialogVisible', 'action', 'tabList'],
+  props: ['item', 'dialogVisible', 'action'],
   data() {
     return {
       rules: {
@@ -65,7 +66,8 @@ export default {
       formLabelWidth: '120px',
       loading: false,
       dialogTitle: null,
-      successTitle: null
+      successTitle: null,
+      tabList: null
     }
   },
   created() {
@@ -76,6 +78,7 @@ export default {
       this.dialogTitle = '修改商品'
       this.successTitle = '修改成功'
     }
+    this.tabList = goodsTabList
   },
   methods: {
     confirm() {

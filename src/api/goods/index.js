@@ -50,4 +50,24 @@ export function addToCategoryList(params) {
     params: params
   })
 }
-
+export function addGoodsToCategory(data) {
+  return request({
+    url: '/category/addGoods',
+    method: 'post',
+    data
+  })
+}
+export function updateGoodsSort(data) {
+  return request({
+    url: '/category/updateGoodsSort',
+    method: 'post',
+    data
+  })
+}
+export function deleteGoodsFromCategory(params) {
+  return request({
+    url: '/category/deleteGoods',
+    method: 'get',
+    params: params
+  })
+}

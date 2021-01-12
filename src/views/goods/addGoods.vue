@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="添加商品" :visible.sync="dialogVisible" :before-close="close" width="70%">
+  <el-dialog title="添加商品" :visible.sync="dialogVisible" :before-close="close" width="70%" top="10vh">
     <div>
       <div>
         <el-tabs v-model="defaultTabName" type="border-card">
@@ -26,9 +26,15 @@
           element-loading-text="Loading"
           row-key="id"
           fit
-          height="330"
+          height="360"
           highlight-current-row
+          @selection-change="handleSelectionChange"
         >
+          >
+          <el-table-column
+            type="selection"
+            width="55"
+          />
           <el-table-column align="center" label="名称">
             <template slot-scope="scope">
               {{ scope.row.name }}
@@ -69,7 +75,7 @@
   </el-dialog>
 </template>
 <script>
-import { addToCategoryList, upsertGoods } from '@/api/goods/index'
+import { addToCategoryList, addGoodsToCategory} from '@/api/goods/index'
 import { goodsTabList } from '@/api/cacheMap'
 export default {
   name: 'AddGoods',
@@ -82,7 +88,8 @@ export default {
       loading: false,
       currentRow: {},
       tabList: null,
-      goodsDataMap: {}
+      goodsDataMap: {},
+      itemChecked: []
     }
   },
   computed: {
@@ -104,20 +111,18 @@ export default {
     this.fetchData()
   },
   methods: {
+    handleSelectionChange(val) {
+      this.itemChecked = val
+    },
     confirm() {
-      this.$refs.form.validate(valid => {
-        if (valid) {
-          this.loading = true
-          upsertGoods(this.item).then(response => {
-            if (response.code === 200) {
-              this.$message.success(this.successTitle)
-              this.$emit('closeDialog', false)
-              this.loading = false
-            } else {
-              // this.loading = false
-              this.$message.error(response.message)
-            }
-          })
+      addGoodsToCategory({ id: this.index, goods: this.itemChecked }).then(response => {
+        if (response.code === 200) {
+          this.$message.success('添加成功')
+          this.$emit('closeDialog', false)
+          this.loading = false
+        } else {
+          this.loading = false
+          this.$message.error(response.message)
         }
       })
     },

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <el-tabs v-model="defaultTabName" type="border-card" @tab-click="changeList">
+      <el-tabs v-model="defaultTabName" type="border-card">
         <el-tab-pane
           v-for="item in tabList"
           :key="item.id"
@@ -59,15 +59,16 @@
         </el-table-column>
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click.native="openDialog({item:scope.row,action:'update'})">编辑</el-button>
+            <el-button type="text" size="small" @click.native="openUpdateGoodsDialog(scope.row)">编辑</el-button>
             <el-popconfirm
               :title="'确认删除'+scope.row.name"
-              @onConfirm="deleteGoods(scope.row.id)"
+              @onConfirm="deleteGoodsFromCategory(scope.row.id)"
             >
               <el-button slot="reference" type="text" size="small" style="color: red;margin-left: 10px">
                 删除
               </el-button>
             </el-popconfirm>
+            <el-button type="text" size="small" class="sortable" style="margin-left: 10px">拖拽</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -77,16 +78,25 @@
         :index="defaultTabName"
         @closeDialog="closeDialog"
       />
+      <upsertGood
+        v-if="updateGoodsDialogVisible"
+        :dialog-visible.sync="updateGoodsDialogVisible"
+        :item="currentRow"
+        action="update"
+        @closeDialog="closeDialog"
+      />
     </div>
   </div>
 </template>
 <script>
 import addGoods from '@/views/goods/addGoods'
-import { categoryList, deleteGoods } from '@/api/goods/index'
-
+import { categoryList, deleteGoodsFromCategory, updateGoodsSort} from '@/api/goods/index'
+import Sortable from 'sortablejs'
+import upsertGood from '@/views/goods/upsertGood'
 export default {
   components: {
-    addGoods
+    addGoods,
+    upsertGood
   },
   data() {
     return {
@@ -94,10 +104,23 @@ export default {
       listLoading: true,
       currentRow: {},
       dialogVisible: false,
+      updateGoodsDialogVisible: false,
       action: null,
-      tabList: [],
-      list: []
+      tabList: []
     }
+  },
+  computed: {
+    list() {
+      const currentList = this.tabList.find(item => item.id === this.defaultTabName)
+      if (currentList) {
+        return currentList.goods
+      } else {
+        return []
+      }
+    }
+  },
+  mounted() {
+    this.setSortable()
   },
   created() {
     this.initData()
@@ -108,14 +131,9 @@ export default {
         this.tabList = response.data
         if (this.tabList) {
           this.defaultTabName = this.tabList[0].id
-          this.list = this.tabList[0].goods
         }
         this.listLoading = false
       })
-    },
-    changeList() {
-      const currentList = this.tabList.find(item => item.id === this.defaultTabName)
-      this.list = currentList.goods
     },
     fetchData() {
       this.listLoading = true
@@ -127,13 +145,36 @@ export default {
     openDialog() {
       this.dialogVisible = true
     },
+    openUpdateGoodsDialog(item) {
+      this.currentRow = item
+      this.updateGoodsDialogVisible = true
+    },
     closeDialog(visable) {
       this.dialogVisible = false
+      this.updateGoodsDialogVisible = false
       this.fetchData()
     },
-    deleteGoods(id) {
-      deleteGoods({ id: id }).then(response => {
+    deleteGoodsFromCategory(goodsId) {
+      deleteGoodsFromCategory({ id: this.defaultTabName, goodsId: goodsId }).then(response => {
         this.fetchData()
+      })
+    },
+    setSortable() {
+      const table = document.querySelector('.el-table__body-wrapper tbody')
+      const self = this
+      Sortable.create(table, {
+        animation: 500,
+        handle: '.sortable',
+        onEnd({ newIndex, oldIndex }) {
+          const targetRow = self.list.splice(oldIndex, 1)[0]
+          self.list.splice(newIndex, 0, targetRow)
+          self.updateGoodsSort()
+        }
+      })
+    },
+    updateGoodsSort() {
+      updateGoodsSort({ id: this.defaultTabName, goods: this.list }).then(response => {
+        // this.fetchData()
       })
     }
   }

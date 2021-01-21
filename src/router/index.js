@@ -102,6 +102,18 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/address',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'address',
+        component: () => import('@/views/address/index'),
+        meta: { title: '地址管理', icon: 'el-icon-position', roles: ['admin'] }
+      }
+    ]
+  },
+  {
     path: '/example',
     component: Layout,
     redirect: '/example/table',

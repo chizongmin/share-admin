@@ -90,7 +90,7 @@
 </template>
 <script>
 import addGoods from '@/views/goods/addGoods'
-import { categoryList, deleteGoodsFromCategory, updateGoodsSort} from '@/api/goods/index'
+import { categoryList, deleteGoodsFromCategory, updateGoodsSort } from '@/api/goods/index'
 import Sortable from 'sortablejs'
 import upsertGood from '@/views/goods/upsertGood'
 export default {

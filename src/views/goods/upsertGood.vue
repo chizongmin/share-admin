@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="dialogTitle" :visible.sync="dialogVisible" :before-close="close">
+  <el-dialog :title="dialogTitle" :visible.sync="dialogVisible" :before-close="close" width="51%">
     <el-form ref="form" :model="item" :rules="rules">
       <el-form-item label="名称" :label-width="formLabelWidth" prop="name">
         <el-input v-model="item.name" autocomplete="off" />
@@ -59,7 +59,6 @@
           :limit="3"
           :before-upload="beforeDetailUpload"
           :on-remove="handleRemove"
-          :class="{hide:showUpload}"
         >
           <i class="el-icon-plus" />
         </el-upload>
@@ -96,7 +95,6 @@ export default {
       successTitle: null,
       tabList: null,
       fileList: [],
-      showUpload: false
     }
   },
   created() {
@@ -108,9 +106,6 @@ export default {
       this.successTitle = '修改成功'
     }
     this.tabList = goodsTabList
-    if (this.item.detailFileList && this.item.detailFileList.length > 2) {
-      this.showUpload = true
-    }
   },
   methods: {
     confirm() {
@@ -178,12 +173,9 @@ export default {
           }
           this.item.detailFileList.push({
             'url': '/api/file/preview?id=' + id,
-            'name': file.filename,
+            'name': file.file.name,
             'id': id
           })
-          if (this.item.detailFileList.length > 2) {
-            this.showUpload = true
-          }
         } else {
           // this.loading = false
           this.$message.error(response.message)
@@ -191,16 +183,13 @@ export default {
       })
     },
     handleRemove(file, fileList) {
-      this.item.detailFileList = fileList
-      if (fileList.length < 3) {
-        this.showUpload = false
-      }
+      this.item.detailFileList = this.item.detailFileList.filter(item => item.name !== file.name)
     }
   }
 }
 </script>
 
-<style>
+<style scoped>
   .avatar-uploader{
     border: 1px dashed #d9d9d9;
     border-radius: 6px;
@@ -221,8 +210,5 @@ export default {
     width: 88px;
     height: 88px;
     display: block;
-  }
-  .hide .el-upload--picture-card {
-    display: none;
   }
 </style>

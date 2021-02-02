@@ -10,18 +10,25 @@
         </el-form-item>
       </div>
       <div style="margin-left: 300px">
+        <el-form-item label="原价" :label-width="formLabelWidth" prop="oldSum">
+          <el-input-number v-model="item.oldSum" :min="0" :max="10000" />
+        </el-form-item>
+      </div>
+      <div style="float: left;position: absolute">
+        <el-form-item label="状态" :label-width="formLabelWidth" prop="status" size="medium">
+          <template>
+            <el-radio-group v-model="item.status">
+              <el-radio-button label="ENABLE">已启用</el-radio-button>
+              <el-radio-button label="DISABLE">已禁用</el-radio-button>
+            </el-radio-group>
+          </template>
+        </el-form-item>
+      </div>
+      <div style="margin-left: 300px">
         <el-form-item label="库存" :label-width="formLabelWidth" prop="number">
           <el-input-number v-model="item.number" :min="0" :max="10000" />
         </el-form-item>
       </div>
-      <el-form-item label="状态" :label-width="formLabelWidth" prop="status" size="medium">
-        <template>
-          <el-radio-group v-model="item.status">
-            <el-radio-button label="ENABLE">已启用</el-radio-button>
-            <el-radio-button label="DISABLE">已禁用</el-radio-button>
-          </el-radio-group>
-        </template>
-      </el-form-item>
       <el-form-item label="属性" :label-width="formLabelWidth" prop="nature" size="medium">
         <template>
           <el-radio-group v-model="item.nature">
@@ -62,6 +69,9 @@
         >
           <i class="el-icon-plus" />
         </el-upload>
+      </el-form-item>
+      <el-form-item label="备注" :label-width="formLabelWidth" prop="remark">
+        <el-input v-model="item.remark" autocomplete="off" type="textarea" />
       </el-form-item>
       <el-form-item label="描述" :label-width="formLabelWidth" prop="desc">
         <el-input v-model="item.desc" autocomplete="off" type="textarea" />

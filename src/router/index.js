@@ -114,6 +114,18 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/config',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'index',
+        component: () => import('@/views/config/index'),
+        meta: { title: '系统配置', icon: 'el-icon-setting', roles: ['admin'] }
+      }
+    ]
+  },
+  {
     path: '/example',
     component: Layout,
     redirect: '/example/table',

@@ -104,7 +104,7 @@ export default {
       dialogTitle: null,
       successTitle: null,
       tabList: null,
-      fileList: [],
+      fileList: []
     }
   },
   created() {

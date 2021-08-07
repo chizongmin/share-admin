@@ -9,7 +9,7 @@ export function list(params) {
 }
 export function filterAddress() {
   return request({
-    url: '/userAddress/filterList',
+    url: '/address/filterList',
     method: 'get'
   })
 }

@@ -29,7 +29,7 @@
           <el-input-number v-model="item.number" :min="0" :max="10000" />
         </el-form-item>
       </div>
-      <el-form-item label="属性" :label-width="formLabelWidth" prop="nature" size="medium">
+      <!--     <el-form-item label="属性" :label-width="formLabelWidth" prop="nature" size="medium">
         <template>
           <el-radio-group v-model="item.nature">
             <el-radio-button label="normal">正常</el-radio-button>
@@ -37,12 +37,42 @@
             <el-radio-button label="overweight">超重</el-radio-button>
           </el-radio-group>
         </template>
-      </el-form-item>
-      <el-form-item label="类别" :label-width="formLabelWidth" prop="category" size="medium">
+      </el-form-item>-->
+      <el-form-item label="标签" :label-width="formLabelWidth" prop="tag" size="medium">
         <template>
-          <el-radio-group v-model="item.category">
-            <el-radio-button v-for="c in tabList" :key="c.name" :label="c.name">{{ c.label }}</el-radio-button>
-          </el-radio-group>
+          <el-tag
+            v-for="tag in item.tags"
+            :key="tag"
+            closable
+            :disable-transitions="false"
+            @close="tagHandleClose(tag)"
+          >
+            {{ tag }}
+          </el-tag>
+          <el-popover
+            ref="popover4"
+            placement="top"
+            width="800"
+            trigger="click"
+            @show="popoverShow"
+          >
+            <div>
+              <div class="toolbar">
+                <el-input v-on:input="searchTags" v-model="searchTagInputValue" placeholder="请输入标签名称" style="width: 370px; margin-right: 20px" />
+                <el-button type="primary" style="margin-right: 10px" @click="addNewTag">新增</el-button>
+              </div>
+              <div style="margin-top:20px">
+                <el-tag
+                  v-for="tag in this.dynamicTags"
+                  :key="tag"
+                  @click="addToGoods(tag)"
+                >
+                  {{ tag }}
+                </el-tag>
+              </div>
+            </div>
+            <el-button slot="reference" class="button-new-tag">添加</el-button>
+          </el-popover>
         </template>
       </el-form-item>
       <el-form-item label="列表缩略图" :label-width="formLabelWidth" prop="indexImage">
@@ -85,7 +115,7 @@
 </template>
 
 <script>
-import { upsertGoods } from '@/api/goods/index'
+import { upsertGoods, addTag, nameLike } from '@/api/goods/index'
 import { goodsTabList } from '@/api/cacheMap'
 import { upload } from '@/api/file'
 export default {
@@ -104,7 +134,9 @@ export default {
       dialogTitle: null,
       successTitle: null,
       tabList: null,
-      fileList: []
+      fileList: [],
+      dynamicTags: [],
+      searchTagInputValue: ''
     }
   },
   created() {
@@ -194,6 +226,47 @@ export default {
     },
     handleRemove(file, fileList) {
       this.item.detailFileList = this.item.detailFileList.filter(item => item.name !== file.name)
+    },
+    tagHandleClose(tag) {
+      this.item.tags.splice(this.item.tags.indexOf(tag), 1)
+    },
+    searchTags() {
+      console.log(this.searchTagInputValue)
+      nameLike({ keyword: this.searchTagInputValue }).then(response => {
+        if (response.code === 200) {
+          this.dynamicTags = response.data
+        } else {
+          this.$message.info(response.message)
+        }
+      })
+    },
+    addNewTag() {
+      const searchTagInputValue = this.searchTagInputValue
+      if (searchTagInputValue) {
+        addTag({ name: searchTagInputValue }).then(response => {
+          if (response.code === 200) {
+            this.dynamicTags.push(searchTagInputValue)
+          } else {
+            this.$message.info(response.message)
+          }
+        })
+      }
+    },
+    addToGoods(tag) {
+      if (this.item.tags.indexOf(tag) === -1) {
+        this.item.tags.push(tag)
+      }
+      this.$refs.popover4.showPopper = false
+      console.log(tag)
+    },
+    popoverShow() {
+      nameLike({ keyword: null }).then(response => {
+        if (response.code === 200) {
+          this.dynamicTags = response.data
+        } else {
+          this.$message.info(response.message)
+        }
+      })
     }
   }
 }
@@ -220,5 +293,21 @@ export default {
     width: 88px;
     height: 88px;
     display: block;
+  }
+  .el-tag + .el-tag {
+    margin-left: 10px;
+    margin-top: 5px;
+  }
+  .button-new-tag {
+    margin-left: 10px;
+    height: 32px;
+    line-height: 30px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .input-new-tag {
+    width: 90px;
+    margin-left: 10px;
+    vertical-align: bottom;
   }
 </style>

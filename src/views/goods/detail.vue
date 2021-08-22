@@ -13,7 +13,7 @@
             <div class="toolbar">
               <el-input v-model="search" placeholder="请输入商品名称" style="width: 300px; margin-right: 20px" />
               <el-button type="primary" @click="fetchData" style="margin-right: 10px">搜索</el-button>
-              <el-button type="primary" @click="openDialog({action:'save',item:{category:defaultTabName,nature:'normal',status:'ENABLE'}})">新增</el-button>
+              <el-button type="primary" @click="openDialog({action:'save',item:{category:defaultTabName,tags:[],status:'ENABLE'}})">新增</el-button>
             </div>
           </div>
         </el-tab-pane>

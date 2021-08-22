@@ -13,6 +13,16 @@
         </el-form-item>
       </el-form>
     </div>
+    <div>
+      <el-form :inline="true" :model="config" v-loading="loading" class="middle">
+        <el-form-item label="积分比例" prop="serviceMssage">
+          <el-input-number v-model="config.scorePercent"></el-input-number>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="onSubmit('scorePercent')">保存</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
   </div>
 </template>
 <script>
@@ -25,7 +35,8 @@ export default {
     return {
       loading: false,
       config: {
-        service: {}
+        service: {},
+        scorePercent: 1
       }
     }
   },

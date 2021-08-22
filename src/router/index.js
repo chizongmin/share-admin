@@ -85,19 +85,19 @@ export const constantRoutes = [
         path: 'list',
         name: 'list',
         component: () => import('@/views/goods/list'),
-        meta: { title: '2C列表', icon: 'el-icon-goods', roles: ['admin'] }
+        meta: { title: '小程序列表', icon: 'el-icon-goods', roles: ['admin'] }
       },
       {
         path: 'index',
         name: 'index',
         component: () => import('@/views/goods/index'),
-        meta: { title: '2C分类', icon: 'el-icon-goods', roles: ['admin'] }
+        meta: { title: '小程序分类', icon: 'el-icon-goods', roles: ['admin'] }
       },
       {
         path: 'detail',
         name: 'detail',
         component: () => import('@/views/goods/detail'),
-        meta: { title: '商品详情', icon: 'el-icon-goods', roles: ['admin'] }
+        meta: { title: '出售商品', icon: 'el-icon-goods', roles: ['admin'] }
       }
     ]
   },

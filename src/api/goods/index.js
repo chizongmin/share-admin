@@ -71,3 +71,17 @@ export function deleteGoodsFromCategory(params) {
     params: params
   })
 }
+export function addTag(data) {
+  return request({
+    url: '/goodsTag/add',
+    method: 'post',
+    data
+  })
+}
+export function nameLike(params) {
+  return request({
+    url: '/goodsTag/nameLike',
+    method: 'get',
+    params: params
+  })
+}

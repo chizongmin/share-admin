@@ -75,7 +75,7 @@
   </el-dialog>
 </template>
 <script>
-import { addToCategoryList, addGoodsToCategory} from '@/api/goods/index'
+import { addToCategoryList, addGoodsToCategory } from '@/api/goods/index'
 import { goodsTabList } from '@/api/cacheMap'
 export default {
   name: 'AddGoods',

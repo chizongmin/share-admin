@@ -3,8 +3,8 @@
     <div class="right-tabbox-newnotice">
       <el-tabs v-model="defaultTabName" type="border-card" @tab-click="fetchData">
         <el-tab-pane
-          :key="item.name"
           v-for="item in tabList"
+          :key="item.name"
           :label="item.label"
           :name="item.name"
         >
@@ -12,8 +12,8 @@
             <i>{{ item.label }}</i>
             <div class="toolbar">
               <el-input v-model="search" placeholder="请输入商品名称" style="width: 300px; margin-right: 20px" />
-              <el-button type="primary" @click="fetchData" style="margin-right: 10px">搜索</el-button>
-              <el-button type="primary" @click="openDialog({action:'save',item:{category:defaultTabName,tags:[],status:'ENABLE'}})">新增</el-button>
+              <el-button type="primary" style="margin-right: 10px" @click="fetchData">搜索</el-button>
+              <el-button type="primary" @click="openDialog({action:'save',item:{category:defaultTabName,tags:[],nature:'normal',status:'ENABLE'}})">新增</el-button>
             </div>
           </div>
         </el-tab-pane>
@@ -35,6 +35,11 @@
             {{ scope.row.name }}
           </template>
         </el-table-column>
+        <el-table-column label="缩略图" align="center">
+          <template slot-scope="scope">
+            <img v-if="scope.row.indexImage" :src="scope.row.indexImage" class="avatar">
+          </template>
+        </el-table-column>
         <el-table-column label="价格" align="center">
           <template slot-scope="scope">
             {{ scope.row.sum }}
@@ -45,14 +50,19 @@
             {{ scope.row.number }}
           </template>
         </el-table-column>
-        <el-table-column label="描述" align="center">
+        <el-table-column label="商品特色" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.desc }}</span>
+            <span>{{ scope.row.remark }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="属性" align="center">
+        <el-table-column label="标签" align="center" >
           <template slot-scope="scope">
-            {{ scope.row.strNature }}
+            <el-tag
+              v-for="tag in scope.row.tags"
+              :key="tag"
+            >
+              {{ tag }}
+            </el-tag>
           </template>
         </el-table-column>
         <el-table-column label="状态" align="center">
@@ -67,7 +77,7 @@
               :title="'确认删除'+scope.row.name"
               @onConfirm="deleteGoods(scope.row.id)"
             >
-              <el-button type="text" size="small" slot="reference" style="color: red;margin-left: 10px">
+              <el-button slot="reference" type="text" size="small" style="color: red;margin-left: 10px">
                 删除
               </el-button>
             </el-popconfirm>
@@ -138,5 +148,10 @@ export default {
 .toolbar {
   float:right;
   margin-right: 60px;
+}
+.avatar {
+  width: 88px;
+  height: 88px;
+  display: block;
 }
 </style>

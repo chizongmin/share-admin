@@ -29,15 +29,15 @@
           <el-input-number v-model="item.number" :min="0" :max="10000" />
         </el-form-item>
       </div>
-      <!--     <el-form-item label="属性" :label-width="formLabelWidth" prop="nature" size="medium">
+      <el-form-item label="属性" :label-width="formLabelWidth" prop="nature" size="medium">
         <template>
           <el-radio-group v-model="item.nature">
-            <el-radio-button label="normal">正常</el-radio-button>
-            <el-radio-button label="fragile">易碎</el-radio-button>
-            <el-radio-button label="overweight">超重</el-radio-button>
+            <el-radio-button label="normal">购前支付</el-radio-button>
+            <el-radio-button label="zero">零支付</el-radio-button>
+            <el-radio-button label="afterPay">到付</el-radio-button>
           </el-radio-group>
         </template>
-      </el-form-item>-->
+      </el-form-item>
       <el-form-item label="标签" :label-width="formLabelWidth" prop="tag" size="medium">
         <template>
           <el-tag
@@ -100,7 +100,7 @@
           <i class="el-icon-plus" />
         </el-upload>
       </el-form-item>
-      <el-form-item label="备注" :label-width="formLabelWidth" prop="remark">
+      <el-form-item label="商品特色" :label-width="formLabelWidth" prop="remark">
         <el-input v-model="item.remark" autocomplete="off" type="textarea" />
       </el-form-item>
       <el-form-item label="描述" :label-width="formLabelWidth" prop="desc">

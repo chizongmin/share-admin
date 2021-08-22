@@ -32,6 +32,11 @@
             {{ scope.row.name }}
           </template>
         </el-table-column>
+        <el-table-column label="缩略图" align="center">
+          <template slot-scope="scope">
+            <img v-if="scope.row.indexImage" :src="scope.row.indexImage" class="avatar">
+          </template>
+        </el-table-column>
         <el-table-column label="价格" align="center">
           <template slot-scope="scope">
             {{ scope.row.sum }}
@@ -42,14 +47,19 @@
             {{ scope.row.number }}
           </template>
         </el-table-column>
-        <el-table-column label="描述" align="center">
+        <el-table-column label="商品特色" align="center">
           <template slot-scope="scope">
-            <span>{{ scope.row.desc }}</span>
+            <span>{{ scope.row.remark }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="属性" align="center">
+        <el-table-column label="标签" align="center" >
           <template slot-scope="scope">
-            {{ scope.row.strNature }}
+            <el-tag
+              v-for="tag in scope.row.tags"
+              :key="tag"
+            >
+              {{ tag }}
+            </el-tag>
           </template>
         </el-table-column>
         <el-table-column label="状态" align="center">
@@ -184,5 +194,10 @@ export default {
   .toolbar {
     float:right;
     margin-right: 60px;
+  }
+  .avatar {
+    width: 88px;
+    height: 88px;
+    display: block;
   }
 </style>

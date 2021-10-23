@@ -25,19 +25,27 @@
         </el-form-item>
       </div>
       <div style="margin-left: 300px">
-        <el-form-item label="库存" :label-width="formLabelWidth" prop="number">
-          <el-input-number v-model="item.number" :min="0" :max="10000" />
+        <el-form-item label="配送佣金" :label-width="formLabelWidth" prop="commission">
+          <el-input-number v-model="item.commission" :min="0" :max="10000" />
         </el-form-item>
       </div>
-      <el-form-item label="属性" :label-width="formLabelWidth" prop="nature" size="medium">
-        <template>
-          <el-radio-group v-model="item.nature">
-            <el-radio-button label="normal">购前支付</el-radio-button>
-            <el-radio-button label="zero">零支付</el-radio-button>
-            <el-radio-button label="afterPay">到付</el-radio-button>
-          </el-radio-group>
-        </template>
-      </el-form-item>
+      <div style="float: left;position: absolute">
+        <el-form-item label="属性" :label-width="formLabelWidth" prop="nature" size="medium">
+          <template>
+            <el-radio-group v-model="item.nature">
+              <el-radio-button label="normal">正常</el-radio-button>
+              <el-radio-button label="zero">免付</el-radio-button>
+              <el-radio-button label="scorePay">积分支付</el-radio-button>
+            </el-radio-group>
+          </template>
+        </el-form-item>
+      </div>
+      <div style="margin-left: 300px">
+        <el-form-item label="库存" :label-width="formLabelWidth" prop="number">
+          <el-input-number v-model="item.number" v-if="item.id" :min="0" :max="10000" :disabled="true" />
+          <el-input-number v-model="item.number" v-else :min="0" :max="10000" />
+        </el-form-item>
+      </div>
       <el-form-item label="标签" :label-width="formLabelWidth" prop="tag" size="medium">
         <template>
           <el-tag
@@ -58,7 +66,7 @@
           >
             <div>
               <div class="toolbar">
-                <el-input v-on:input="searchTags" v-model="searchTagInputValue" placeholder="请输入标签名称" style="width: 370px; margin-right: 20px" />
+                <el-input v-model="searchTagInputValue" placeholder="请输入标签名称" style="width: 370px; margin-right: 20px" @input="searchTags" />
                 <el-button type="primary" style="margin-right: 10px" @click="addNewTag">新增</el-button>
               </div>
               <div style="margin-top:20px">
@@ -117,7 +125,7 @@
 <script>
 import { upsertGoods, addTag, nameLike } from '@/api/goods/index'
 import { goodsTabList } from '@/api/cacheMap'
-import { upload } from '@/api/file'
+// import { upload } from '@/api/file'
 export default {
   name: 'UpsertGood',
   // eslint-disable-next-line vue/require-prop-types
@@ -173,12 +181,12 @@ export default {
     },
     beforeAvatarUpload(file) {
       const isJPG = file.type === 'image/jpeg'
-      const isLt10Kb = file.size / 1024 < 20
+      const isLt10Kb = file.size / 1024 < 40
       if (!isJPG) {
         this.$message.error('上传头像图片只能是 JPG 格式!')
       }
       if (!isLt10Kb) {
-        this.$message.error('上传头像图片大小不能超过 20kb!')
+        this.$message.error('上传头像图片大小不能超过 40kb!')
       }
       return isJPG && isLt10Kb
     },
@@ -204,25 +212,41 @@ export default {
       }
       return isJPG && isLt50Kb
     },
-    uploadDetailImage(file) {
-      const formData = new FormData()
-      formData.append(file.filename, file.file, file.file.name)
-      upload(formData).then(response => {
-        if (response.code === 200) {
-          const id = response.data.id
-          if (!this.item.detailFileList) {
-            this.item.detailFileList = []
-          }
-          this.item.detailFileList.push({
-            'url': '/api/file/preview?id=' + id,
-            'name': file.file.name,
-            'id': id
-          })
-        } else {
-          // this.loading = false
-          this.$message.error(response.message)
+    uploadDetailImage(fileData) {
+      const _this = this
+      const rd = new FileReader() // 创建文件读取对象
+      const file = fileData.file
+      rd.readAsDataURL(file) // 文件读取装换为base64类型
+      rd.onloadend = function(e) {
+        if (!_this.item.detailFileList) {
+          _this.item.detailFileList = []
         }
-      })
+        _this.item.detailFileList.push({
+          'url': this.result,
+          'name': file.name
+        })
+        // this指向当前方法onloadend的作用域
+        // 更新对象中的属性值使v-if生效
+        // _this.$set(_this.item, 'detailFileList', this.result)
+      }
+      // const formData = new FormData()
+      // formData.append(file.filename, file.file, file.file.name)
+      // upload(formData).then(response => {
+      //   if (response.code === 200) {
+      //     const id = response.data.id
+      //     if (!this.item.detailFileList) {
+      //       this.item.detailFileList = []
+      //     }
+      //     this.item.detailFileList.push({
+      //       'url': '/api/file/preview?id=' + id,
+      //       'name': file.file.name,
+      //       'id': id
+      //     })
+      //   } else {
+      //     // this.loading = false
+      //     this.$message.error(response.message)
+      //   }
+      // })
     },
     handleRemove(file, fileList) {
       this.item.detailFileList = this.item.detailFileList.filter(item => item.name !== file.name)

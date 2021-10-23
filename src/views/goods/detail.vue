@@ -73,6 +73,7 @@
         <el-table-column label="操作" align="center">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click.native="openDialog({item:scope.row,action:'update'})">编辑</el-button>
+            <el-button type="text" size="small" @click.native="changeNumber(scope.row)">修改库存</el-button>
             <el-popconfirm
               :title="'确认删除'+scope.row.name"
               @onConfirm="deleteGoods(scope.row.id)"
@@ -95,8 +96,9 @@
   </div>
 </template>
 <script>
+import { Loading } from 'element-ui'
 import upsertGood from '@/views/goods/upsertGood'
-import { goodsList, deleteGoods } from '@/api/goods/index'
+import { goodsList, deleteGoods, changeNumber } from '@/api/goods/index'
 import { goodsTabList } from '@/api/cacheMap'
 
 export default {
@@ -139,6 +141,22 @@ export default {
     deleteGoods(id) {
       deleteGoods({ id: id }).then(response => {
         this.fetchData()
+      })
+    },
+    changeNumber(item) {
+      this.$prompt('请输入当前库存，减少输入负数', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      }).then(({ value }) => {
+        const loadingInstance = Loading.service({ fullscreen: false })
+        changeNumber({ id: item.id, number: value }).then(response => {
+          if (response.code === 200) {
+            loadingInstance.close()
+            this.$message.info(response.message)
+          } else {
+            loadingInstance.close()
+          }
+        })
       })
     }
   }

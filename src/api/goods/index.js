@@ -85,3 +85,10 @@ export function nameLike(params) {
     params: params
   })
 }
+export function changeNumber(data) {
+  return request({
+    url: '/goods/changeNumber',
+    method: 'post',
+    data
+  })
+}
